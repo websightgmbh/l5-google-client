@@ -70,6 +70,13 @@ class GoogleClientFactory
      */
     protected function getClient(array $auth)
     {
+        if ($auth['method'] == 'metadata') {
+            return $this->authenticateClientByMetadata($auth);
+        }
         return new Google_Client();
+    }
+
+    protected function authenticateClientByMetadata() {
+
     }
 }

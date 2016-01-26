@@ -1,10 +1,57 @@
 # Laravel 5 - Google API Client
 
-Depending on your environment, there are different ways of getting a
-hold on an authenticated Google API client.
-
 This library relies on the 
-[Laravel-Manager package by Graham Campbell](https://github.com/GrahamCampbell/Laravel-Manager). 
+[Laravel-Manager package by Graham Campbell](https://github.com/GrahamCampbell/Laravel-Manager). Thank you, Graham!
+
+## What is it?
+
+To access Google Cloud Platform (GCP) services like Cloud Storage (ECS) or Compute Engine (GCE),
+you need to authenticate yourself as a legit user.
+
+Google Cloud Platform has a concept of service accounts which allows granular access control to the cloud
+platform services.
+
+Most applications however use one service account (which is totally legit) and use it for every operation. This
+library manages the different service accounts as *connections* to GCP, which makes it super easy to
+authenticate against the platform.
+
+As GCP even provides a metadata service, this library can automatically retrieve all required credentials from
+the service and authenticate on the fly. It can do so with a 'default' account, every GCP project is associated with
+from the moment of creation on, or a specified account name (see the config file for details).
+
+## Installation
+
+The package should be installed with composer:
+ 
+```bash
+composer require websight/l5-google-client
+```
+
+You need to include the service provider in `config/app.php`:
+
+```php
+        \Websight\L5GoogleClient\GoogleApiClientServiceProvider::class,
+```
+
+And add the facade to `config/app.php`:
+
+```php
+        'GoogleClient' => \Websight\L5GoogleClient\Facades\GoogleClient::class
+```
+
+Then publish the configuration (you don't need to if you rely on the standards):
+
+```bash
+php artisan vendor:publish --provider="Websight\L5GoogleClient\GoogleApiClientServiceProvider" --tag="config"
+```
+
+## Configuration
+
+To be done.
+
+## Usage
+
+To be done.
 
 ## License
 

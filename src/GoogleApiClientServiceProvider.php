@@ -52,7 +52,7 @@ class GoogleApiClientServiceProvider extends ServiceProvider
     {
         $source = realpath(__DIR__ . '/../config/google-client.php');
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
-            $this->publishes([$source => config_path('google-client.php')]);
+            $this->publishes([$source => config_path('google-client.php')], 'config');
         } elseif ($this->app instanceof LumenApplication) {
             $this->app->configure('google-client');
         }

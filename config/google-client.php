@@ -19,7 +19,7 @@ return [
     | connections at once using the manager class.
     |
     */
-    'default'     => 'auto',
+    'default'     => env('GOOGLE_API_CLIENT_CONNECTION', 'auto'),
 
     /*
     |--------------------------------------------------------------------------
@@ -32,17 +32,40 @@ return [
     |
     */
     'connections' => [
-        'auto'     => [
-            'method' => 'metadata'
+        /*
+         * You can use the auto-configuration when you're on AppEngine
+         * or ComputeEngine in general. This method fetches all needed credentials
+         * from the metadata service.
+         *
+         * @see https://cloud.google.com/appengine/docs/managed-vms/custom-runtimes#accessing_cloud_platform_services
+         * @see https://cloud.google.com/compute/docs/metadata
+         */
+        'auto' => [
+            'method'             => 'metadata',
+            'service_account_id' => env('GOOGLE_API_CLIENT_AUTO_ACCOUNT_ID', 'default')
         ],
-        'projectA' => [
+
+        /*
+         * You can use the recommended JSON key method, by choosing 'json' as method.
+         * JSON token files have all the required information contained in the hash.
+         */
+        'json' => [
             'method' => 'json',
-            'file'   => storage_path('example_token.json')
+            'file'   => env('GOOGLE_API_CLIENT_JSON_FILE', storage_path('google_service_account.json'))
         ],
-        'projectB' => [
-            'method'   => 'p12',
-            'file'     => storage_path('example_token.p12'),
-            'password' => 'notapassword'
+
+        /*
+         * You can use a legacy p12 certificate, by choosing 'p12' as method.
+         * This is a legacy authentication method and not recommended anymore.
+         *
+         * However, if you want to use it, you need to know the service account id
+         * which it is associated with.
+         */
+        'p12'  => [
+            'method'             => 'p12',
+            'file'               => env('GOOGLE_API_CLIENT_P12_FILE', storage_path('google_service_account.p12')),
+            'service_account_id' => env('GOOGLE_API_CLIENT_P12_ACCOUNT_ID', 'name@project-id.iam.gserviceaccount.com'),
+            'password'           => env('GOOGLE_API_CLIENT_P12_PASSWORD', 'notasecret')
         ]
     ]
 ];
