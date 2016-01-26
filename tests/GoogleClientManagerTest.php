@@ -9,7 +9,6 @@
 
 namespace GrahamCampbell\Tests\Dropbox;
 
-use Dropbox\Client;
 use Google_Client;
 use GrahamCampbell\TestBench\AbstractTestCase as AbstractTestBenchTestCase;
 use Illuminate\Contracts\Config\Repository;
