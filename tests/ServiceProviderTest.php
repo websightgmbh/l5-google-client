@@ -33,14 +33,4 @@ class ServiceProviderTest extends AbstractTestCase
     {
         $this->assertIsInjectable(GoogleClientManager::class);
     }
-
-    public function testBindings()
-    {
-        $this->assertIsInjectable(Google_Client::class);
-        $original = $this->app['google-client.connection'];
-        $this->app['google-client']->reconnect();
-        $new = $this->app['google-client.connection'];
-        $this->assertNotSame($original, $new);
-        $this->assertEquals($original, $new);
-    }
 }

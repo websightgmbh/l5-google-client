@@ -9,6 +9,8 @@
 
 namespace Websight\L5GoogleClient;
 
+use Google_Auth_AssertionCredentials;
+use Google_Auth_ComputeEngine;
 use Google_Client;
 use InvalidArgumentException;
 
@@ -57,8 +59,16 @@ class GoogleClientFactory
         if (!in_array($config['method'], $this->allowedMethods)) {
             throw new InvalidArgumentException('You need to choose a valid authentication method.');
         }
+        if ($config['method'] == 'json' || $config['method'] == 'json') {
+            if (!is_array($config['scopes'])) {
+                throw new InvalidArgumentException('No auth scopes defined.');
+            }
+            if (count($config['scopes']) == null) {
+                throw new InvalidArgumentException('No auth scopes defined.');
+            }
+        }
 
-        return array_only($config, ['file', 'method', 'password']);
+        return array_only($config, ['file', 'method', 'password', 'scopes', 'service_account_id']);
     }
 
     /**
@@ -71,12 +81,35 @@ class GoogleClientFactory
     protected function getClient(array $auth)
     {
         if ($auth['method'] == 'metadata') {
-            return $this->authenticateClientByMetadata($auth);
+            $client = new Google_Client();
+            $authentication = new Google_Auth_ComputeEngine($client);
+            $authentication->acquireAccessToken();
+            $token = $authentication->getAccessToken();
+
+            $client->setAccessToken($token);
+
+            return $client;
         }
-        return new Google_Client();
-    }
 
-    protected function authenticateClientByMetadata() {
+        if ($auth['method'] == 'p12') {
+            $credentials = new Google_Auth_AssertionCredentials(
+                $auth['service_account'],
+                $auth['scopes'],
+                file_get_contents($auth['service_account_certificate']),
+                $auth['service_account_certificate_password']
+            );
 
+            $client = new Google_Client();
+            $client->setAssertionCredentials($credentials);
+
+            return $client;
+        }
+
+        if ($auth['method'] == 'json') {
+            $client = new Google_Client();
+            $client->loadServiceAccountJson($auth['file'], $auth['scopes']);
+
+            return $client;
+        }
     }
 }

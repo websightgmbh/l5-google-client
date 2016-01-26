@@ -51,7 +51,8 @@ return [
          */
         'json' => [
             'method' => 'json',
-            'file'   => env('GOOGLE_API_CLIENT_JSON_FILE', storage_path('google_service_account.json'))
+            'file'   => env('GOOGLE_API_CLIENT_JSON_FILE', storage_path('google_service_account.json')),
+            'scopes' => [],
         ],
 
         /*
@@ -64,6 +65,7 @@ return [
         'p12'  => [
             'method'             => 'p12',
             'file'               => env('GOOGLE_API_CLIENT_P12_FILE', storage_path('google_service_account.p12')),
+            'scopes'             => [],
             'service_account_id' => env('GOOGLE_API_CLIENT_P12_ACCOUNT_ID', 'name@project-id.iam.gserviceaccount.com'),
             'password'           => env('GOOGLE_API_CLIENT_P12_PASSWORD', 'notasecret')
         ]

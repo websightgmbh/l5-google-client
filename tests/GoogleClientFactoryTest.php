@@ -21,6 +21,9 @@ use Websight\L5GoogleClient\GoogleClientFactory;
  */
 class GoogleClientFactoryTest extends AbstractTestBenchTestCase
 {
+    /**
+     * @expectedException \Google_IO_Exception
+     */
     public function testMakeFromMetadata()
     {
         $factory = $this->getGoogleClientFactory();
