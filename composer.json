@@ -1,0 +1,30 @@
+{
+    "name": "websight/l5-google-client",
+    "description": "Wraps a authenticated google api client",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Cedric Ziel",
+            "email": "ziel@websight.de"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "graham-campbell/manager": "^2.3",
+        "illuminate/contracts": "5.1.*|5.2.*",
+        "illuminate/support": "5.1.*|5.2.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8|^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Websight\\L5GoogleClient\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Websight\\L5GoogleClient\\Tests\\": "tests/"
+        }
+    }
+}
