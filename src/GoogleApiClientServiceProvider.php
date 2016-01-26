@@ -1,7 +1,15 @@
 <?php
 
+/*
+ * This file is part of L5 Google Client
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Websight\L5GoogleClient;
 
+use Google_Client;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Application as LaravelApplication;
@@ -30,7 +38,9 @@ class GoogleApiClientServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // TODO: Implement register() method.
+        $this->registerFactory($this->app);
+        $this->registerManager($this->app);
+        $this->registerBindings($this->app);
     }
 
     /**
@@ -50,14 +60,55 @@ class GoogleApiClientServiceProvider extends ServiceProvider
     }
 
     /**
+     * @param \Illuminate\Contracts\Foundation\Application $app
+     */
+    private function registerFactory($app)
+    {
+        $app->singleton('google-client.factory', function ($app) {
+            return new GoogleClientFactory();
+        });
+        $app->alias('google-client.factory', GoogleClientFactory::class);
+    }
+
+    /**
+     * @param \Illuminate\Contracts\Foundation\Application $app
+     */
+    private function registerManager($app)
+    {
+        $app->singleton('google-client', function ($app) {
+            $config = $app['config'];
+            $factory = $app['google-client.factory'];
+
+            return new GoogleClientManager($config, $factory);
+        });
+        $app->alias('google-client', GoogleClientManager::class);
+    }
+
+    /**
+     * @param \Illuminate\Contracts\Foundation\Application $app
+     */
+    private function registerBindings($app)
+    {
+        $app->bind('google-client.connection', function ($app) {
+            $manager = $app['google-client'];
+
+            return $manager->connection();
+        });
+        $app->alias('google-client.connection', Google_Client::class);
+    }
+
+    /**
      * Get the services provided
      *
-     * @return array
+     * @return string[]
      */
     public function provides()
     {
         return [
-            'google-client'
+            'google-client.factory',
+            'google-client',
+            'google-client.connection'
         ];
     }
+
 }

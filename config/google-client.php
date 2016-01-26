@@ -32,17 +32,17 @@ return [
     |
     */
     'connections' => [
-        'main'     => [
-            'method' => 'env'
+        'auto'     => [
+            'method' => 'metadata'
         ],
         'projectA' => [
             'method' => 'json',
             'file'   => storage_path('example_token.json')
         ],
         'projectB' => [
-            'method' => 'p12',
-            'file'   => storage_path('example_token.p12'),
-            'password'
+            'method'   => 'p12',
+            'file'     => storage_path('example_token.p12'),
+            'password' => 'notapassword'
         ]
     ]
 ];
